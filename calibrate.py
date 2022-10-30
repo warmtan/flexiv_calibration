@@ -70,16 +70,13 @@ def calibrate(config):
     # Connect to the robot
     print('Connecting to robot...')  #连接出现问题  修改为client 不需要读取configuration文件夹中的robot_config.json
     robot=FlexivRobot("192.168.2.100","192.168.2.109")
+    # Slow down robot to SAFE values
+    #go home
     array1=np.array([0.68659854,-0.11323812,0.28814268,0.00116366,0.00595991,0.99997848,0.00248933])
     robot.move_ptp(array1, 
                     max_jnt_vel=[6, 6, 7, 7, 14, 14, 14],
                     max_jnt_acc=[3.60, 3.60, 4.20, 4.20, 8.40, 8.40, 8.40])
-    # robot = URRobot(config.robot_config_file)
-    # Slow down robot to SAFE values
-    # robot.activate_safe_mode()
-    # robot.go_home()
-    
-    
+
     # Connect to the camera
     print('Connecting to camera...')
     camera = RealsenseD415TCP(config.camera_config_file)
@@ -105,7 +102,8 @@ def calibrate(config):
                     observed_pts.append([checkerboard_x, checkerboard_y, checkerboard_z])
                     observed_pix.append(checkerboard_pix)
                     # Get current robot pose
-                    current_pose = robot.get_cartesian_pose() #这里使用了robot！！！！！！！！！！！！
+                    # current_pose = robot.get_cartesian_pose() #这里使用了robot！！！！！！！！！！！！
+                    current_pose = robot.get_tcp_pose()
                     if config.calibration_type == "EYE_IN_HAND":
                         rot_vec = np.array(current_pose)
                         rot_vec.shape = (1,6)
