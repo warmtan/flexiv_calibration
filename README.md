@@ -1,7 +1,7 @@
 # Hand-Eye Calibration
 
-<img src="resources/eih-process.gif" height=300px align="left"/>
-<img src="resources/eth-process.gif" height=300px align="middle"/>
+<!-- <img src="resources/eih-process.gif" height=300px align="left"/>
+<img src="resources/eth-process.gif" height=300px align="middle"/> -->
 
  While performing the calibration process: 
  - Left image: __eye-in-hand__: To find the `T_robot_camera`. 
