@@ -30,7 +30,6 @@ class Configuration(object):
     def dump_sample_file():
         config = {
             "calibration_type": "EYE_IN_HAND",
-            "robot_config_file":"PATH/TO/FILE",
             "camera_config_file":"PATH/TO/FILE",
             "workspace_limits": [[-0.490, 0.390], [-0.645, -0.185], [0.462, 0.710]],
             "calib_grid_step": 0.05,
@@ -85,8 +84,8 @@ def calibrate(config):
     for calib_pt_idx in range(num_calib_grid_pts):
         tool_position = calib_grid_pts[calib_pt_idx,:]
         print('Calibration point: ', calib_pt_idx, '/', num_calib_grid_pts)
-        robot.move_to_pose(tool_position, config.tool_orientation) #需要更换为flexiv !!!!!
-        # robot.get_tcp_pose()  #得到笛卡尔坐标系
+        #使用eye to hand 需要增加其内容属性
+        robot.get_tcp_pose()  #得到笛卡尔坐标系
         time.sleep(1)
         # Wait for a coherent pair of frames: depth and color
         camera_color_img, camera_depth_img = camera.get_state()
