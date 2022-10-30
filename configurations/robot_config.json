@@ -1,6 +1,6 @@
 {
-    "robot_ip": "192.168.50.71",
-    "tcp_port": 30002,
+    "robot_ip": "192.168.2.100",
+    "": 30002,
     "rct_port": 30003,
     "dashboard_port":29999,
     "program": "/programs/Softmanbot/zimmer_tool_pneumatic.urp",

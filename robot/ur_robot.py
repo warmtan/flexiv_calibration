@@ -8,20 +8,20 @@ import numpy as np
 import time
 
 class URRobot():
-    """Universal Robots."""
-    NUM_BYTES = 2048
-    ROBOT_STATE_MESSAGE = 16
+    """Universal Robots.""" #通用机器人
+    NUM_BYTES = 2048        #字节符号  ！
+    ROBOT_STATE_MESSAGE = 16  #机器人状态信息
 
     def __init__(self, configuration_filepath, start_on_creation=True):
         """
-        Initializes a new UR robot.
+        Initializes a new UR robot.   #初始化一个新的机器人
 
-        Args:
-            configuration_filepath (string): path to the configuration JSON file.
+        Args:                         #参数
+            configuration_filepath (string): path to the configuration JSON file.  #configuration_filepath(srting):配置json文件路径
         """
         self.configuration_filepath = configuration_filepath
         self.config = ConfigLoader.load(configuration_filepath)
-        #creates a class which instance attributes are based on the config dictionary
+        #creates a class which instance attributes are based on the config dictionary #创建一个基于配置字典的实例属性的类
         for k, v in self.config.items():
             setattr(self, k, v)
         self.joint_acc = self.JOINT_ACC_DEFAULT
@@ -32,7 +32,7 @@ class URRobot():
         if start_on_creation:
             self.start()
 
-    # Robot methods
+    # Robot methods  机器人方法
     # -------------------------------------
     def go_home(self):
         """Moves the robot to home pose."""
