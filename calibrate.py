@@ -1,4 +1,3 @@
-# from robot.ur_robot import URRobot   # 需要修改
 from lib_py.flexiv_robot import FlexivRobot
 from vision.realsense_d415_tcp import RealsenseD415TCP
 import utils.utils as utils
