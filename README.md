@@ -20,8 +20,8 @@
 ## __Problem__:
 
 
-<img src="resources/eye-in-hand.svg" height=280px align="left"/>
-<img src="resources/eye-to-hand.svg" height=280px align="middle"/>
+<!-- <img src="resources/eye-in-hand.svg" height=280px align="left"/>
+<img src="resources/eye-to-hand.svg" height=280px align="middle"/> -->
 
  Left image: __eye-in-hand__. To find the `T_robot_camera`. Right image: __eye-to-hand__. To find the `T_ext_camera`.
 [Source](https://doc.rc-visard.com/latest/en/handeye_calibration.html)
