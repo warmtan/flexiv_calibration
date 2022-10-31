@@ -76,7 +76,7 @@ def calibrate(config):
     # Slow down robot to SAFE values
     #go home
     # array1=np.array([0.68659854,-0.11323812,0.28814268,0.00116366,0.00595991,0.99997848,0.00248933])
-    array1=np.array([0.68659854,-0.11323812,0.3,0.00116366,0.00595991,0.99997848,0.00248933])
+    array1=np.array([0.68659854,-0.11323812,0.5,0.00116366,0.00595991,0.99997848,0.00248933])
     robot.move_ptp(array1, 
                     max_jnt_vel=[6, 6, 7, 7, 14, 14, 14],
                     max_jnt_acc=[3.60, 3.60, 4.20, 4.20, 8.40, 8.40, 8.40])
@@ -84,19 +84,16 @@ def calibrate(config):
     # Connect to the camera
     print('Connecting to camera...')
     camera = RealsenseD415TCP(config.camera_config_file)
-    print(robot.get_tcp_pose())
     # Move robot to each calibration point in workspace
     print('Collecting data...')
     for calib_pt_idx in range(num_calib_grid_pts):
         tool_position = calib_grid_pts[calib_pt_idx,:]
         print('Calibration point: ', calib_pt_idx, '/', num_calib_grid_pts)
         #使用eye to hand 需要增加其内容属性
-        print(robot.get_tcp_pose())
         robot.get_tcp_pose()  #得到笛卡尔坐标系
         time.sleep(1)
         # Wait for a coherent pair of frames: depth and color
-        (camera_color_img, camera_depth_img )= camera.get_state()
-        print(robot.get_tcp_pose())
+        camera_color_img, camera_depth_img = camera.get_state()
         if not (camera_depth_img is None and camera_color_img is None):
             checkerboard_pix = visionutils.find_checkerboard(camera_color_img, config.checkerboard_size)
             if checkerboard_pix is not None:

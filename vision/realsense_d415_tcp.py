@@ -39,8 +39,6 @@ class RealsenseD415TCP():
         depth_img = np.fromstring(data[(10*4):((10*4)+self.im_width*self.im_height*2)], np.uint16).reshape(self.im_height, self.im_width)
         color_img = np.fromstring(data[((10*4)+self.im_width*self.im_height*2):], np.uint8).reshape(self.im_height, self.im_width, 3)
         depth_img = depth_img.astype(float) * depth_scale
-        print(color_img)
-        print("111")
         return color_img, depth_img
 
     def start(self):
