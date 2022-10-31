@@ -14,6 +14,9 @@ from pose import compute_angle_two_quat, compute_rot_z, pose_to_degree
 
 from flexiv_api import FlexivApi, error_code
 
+from utils.config_loader import ConfigLoader
+import utils.utils as utils
+
 
 class ForceServer(threading.Thread):
     """Force Seg Record Class.
@@ -773,10 +776,40 @@ class FlexivRobot(FlexivApi):
         plt.pause(0.4)
 
     def end_plot(self):
-        """close plot window.
+        """close plot window.F
 
         Raises:
             RuntimeError: error occurred when mode is None.
         """
         plt.ioff()
         plt.show()
+        
+    def get_cartesian_pose(self):
+        A_pose = self.get_tcp_pose()
+        B_position = A_pose[0:3]
+        C_orientation = A_pose[3:7]
+        MyEuler = R.from_quat(C_orientation).as_euler('zyx')
+        MyEuler.reverse()
+        B_position.extend(MyEuler)
+        C_pose = B_position
+        return C_pose 
+     
+    def move_wrt_tool(self, position):
+        current_pose = self.get_cartesian_pose()
+        current_pose = np.array(current_pose)
+        current_position = current_pose[0:3]
+        orientation = current_pose[3:6]
+        # Transform from position to base_world_position
+        position.shape = (3,1)
+        current_pose.shape = (1,6)
+        T_eb = utils.V2T(current_pose)
+        base_world_position = np.dot(T_eb[0:3,0:3], position[0:3,0]) + current_position
+        self.move_to_pose(base_world_position[0:3], orientation)
+        
+        
+    def move_to_pose(self, position, orientation):
+        #Block until robot reaches desired pose
+        current_pose = self.get_cartesian_pose()
+        while not all([np.abs(current_pose[i] - position[i]) < self.pose_tolerance[i] for i in range(3)]):
+            current_pose = self.get_cartesian_pose()
+            time.sleep(0.01)

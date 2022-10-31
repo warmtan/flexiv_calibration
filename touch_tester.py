@@ -1,4 +1,4 @@
-from robot.ur_robot import URRobot
+from flexiv_robot import FlexivRobot
 from vision.realsense_d415_tcp import RealsenseD415TCP
 import utils.utils as utils
 import vision.utils as visionutils
@@ -11,9 +11,7 @@ import argparse
 def touch_tester(args):
     config = ConfigLoader.load(args.config_file)
     print(f'Touch tester in {config["calibration_type"]} mode as indicated on configuration file.')
-    robot = URRobot(config["robot_config_file"])
-    robot.activate_safe_mode()
-    robot.move_joints(robot.home_joints_rad)
+    robot = FlexivRobot("192.168.2.100","192.168.2.109")
 
     camera = RealsenseD415TCP(config["camera_config_file"])
     # Load camera pose (from running camera_calibrator.py), and depth scale
@@ -47,7 +45,7 @@ def touch_tester(args):
                 # robot.move_to_pose(base_world_position[0:3], current_orientation)
 
             else: # "EYE_TO_HAND"
-                current_pose = robot.get_cartesian_pose()
+                current_pose = robot.get_tcp_pose() #得到了笛卡尔坐标系
                 current_pose = np.array(current_pose)
                 current_orientation = current_pose[3:6]
                 base_world_position = world_position

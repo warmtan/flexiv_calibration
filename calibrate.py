@@ -1,8 +1,3 @@
-import sys
-import os
-sys.path.append("lib_py")
-
-
 from flexiv_robot import FlexivRobot
 from vision.realsense_d415_tcp import RealsenseD415TCP
 import utils.utils as utils
@@ -90,7 +85,7 @@ def calibrate(config):
         tool_position = calib_grid_pts[calib_pt_idx,:]
         print('Calibration point: ', calib_pt_idx, '/', num_calib_grid_pts)
         #使用eye to hand 需要增加其内容属性
-        robot.get_tcp_pose()  #得到笛卡尔坐标系
+        robot.move_to_pose(tool_position, config.tool_orientation)  #得到笛卡尔坐标系
         time.sleep(1)
         # Wait for a coherent pair of frames: depth and color
         camera_color_img, camera_depth_img = camera.get_state()
@@ -105,7 +100,7 @@ def calibrate(config):
                     observed_pix.append(checkerboard_pix)
                     # Get current robot pose
                     # current_pose = robot.get_cartesian_pose() #这里使用了robot！！！！！！！！！！！！
-                    current_pose = robot.get_tcp_pose()
+                    current_pose = robot.get_cartesian_pose()
                     if config.calibration_type == "EYE_IN_HAND":
                         rot_vec = np.array(current_pose)
                         rot_vec.shape = (1,6)
