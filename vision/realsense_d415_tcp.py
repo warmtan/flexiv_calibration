@@ -1,3 +1,4 @@
+from curses import color_content
 from utils.config_loader import ConfigLoader
 import numpy as np
 import socket
@@ -24,7 +25,6 @@ class RealsenseD415TCP():
     def get_state(self):
         # Ping the server with anything
         self.tcp_socket.send(b'asdf')
-
         # Fetch TCP data:
         #     color camera intrinsics, 9 floats, number of bytes: 9 x 4
         #     depth scale for converting depth from uint16 to float, 1 float, number of bytes: 4
@@ -39,6 +39,8 @@ class RealsenseD415TCP():
         depth_img = np.fromstring(data[(10*4):((10*4)+self.im_width*self.im_height*2)], np.uint16).reshape(self.im_height, self.im_width)
         color_img = np.fromstring(data[((10*4)+self.im_width*self.im_height*2):], np.uint8).reshape(self.im_height, self.im_width, 3)
         depth_img = depth_img.astype(float) * depth_scale
+        print(color_img)
+        print("111")
         return color_img, depth_img
 
     def start(self):
