@@ -788,11 +788,11 @@ class FlexivRobot(FlexivApi):
         A_pose = self.get_tcp_pose()
         B_position = A_pose[0:3]
         C_orientation = A_pose[3:7]
-        MyEuler = R.from_quat(C_orientation).as_euler('zyx')
-        MyEuler.reverse()
-        B_position.extend(MyEuler)
-        C_pose = B_position
-        return C_pose 
+        MyEuler = R.from_quat(C_orientation).as_euler('xyz')
+        # MyEuler.reverse()
+        # B_position.extend(MyEuler)
+        A_pose[3:6] = B_position
+        return A_pose
      
     def move_wrt_tool(self, position):
         current_pose = self.get_cartesian_pose()
@@ -806,10 +806,13 @@ class FlexivRobot(FlexivApi):
         base_world_position = np.dot(T_eb[0:3,0:3], position[0:3,0]) + current_position
         self.move_to_pose(base_world_position[0:3], orientation)
         
-        
     def move_to_pose(self, position, orientation):
+        array1=np.array([0.68659854,-0.11323812,0.28,0.00116366,0.00595991,0.99997848,0.00248933])
+        self.move_ptp( array1, 
+                    max_jnt_vel=[6, 6, 7, 7, 14, 14, 14],
+                    max_jnt_acc=[3.60, 3.60, 4.20, 4.20, 8.40, 8.40, 8.40])
         #Block until robot reaches desired pose
         current_pose = self.get_cartesian_pose()
-        while not all([np.abs(current_pose[i] - position[i]) < self.pose_tolerance[i] for i in range(3)]):
-            current_pose = self.get_cartesian_pose()
-            time.sleep(0.01)
+        # while not all([np.abs(current_pose[i] - position[i]) < self.pose_tolerance[i] for i in range(3)]):
+        #     current_pose = self.get_cartesian_pose()
+        time.sleep(0.01)
