@@ -14,6 +14,9 @@ from mpl_toolkits.mplot3d import Axes3D
 import argparse
 import os
 
+# envpath = '/data/xx/xx/venv/lib/python3.6/site-packages/cv2/qt/plugins/platforms'
+# os.environ['QT_QPA_PLATFORM_PLUGIN_PATH'] = envpath
+
 class Configuration(object):
     def __init__(self, config_file):
         config = ConfigLoader.load(args.config_file)
@@ -70,18 +73,18 @@ def calibrate(config):
     robot=FlexivRobot("192.168.2.100","192.168.2.109")
     # Slow down robot to SAFE values
     #go home
-    array2=np.array([0.68659854,-0.11323812,0.28814268,0.00116366,0.00595991,0.99997848,0.00248933])
+    # array2=np.array([0.68659854,-0.11323812,0.28814268,0.00116366,0.00595991,0.99997848,0.00248933])
     # array1=np.array([0.68659854,-0.11323812,0.5,0.00116366,0.00595991,0.99997848,0.00248933])
-    robot.move_ptp(array2, 
-                    max_jnt_vel=[1, 1, 2, 2, 4, 4, 4],
-                    max_jnt_acc=[3.60, 3.60, 4.20, 4.20, 8.40, 8.40, 8.40])
+    # robot.move_ptp(array2, 
+                    #max_jnt_vel=[1, 1, 2, 2, 4, 4, 4],
+                    #max_jnt_acc=[3.60, 3.60, 4.20, 4.20, 8.40, 8.40, 8.40])
 
     # Connect to the camera
     print('Connecting to camera...')
     camera = RealsenseD415TCP(config.camera_config_file)
     # Move robot to each calibration point in workspace
     print('Collecting data...')
-    for calib_pt_idx in range(num_calib_grid_pts):
+    for calib_pt_idx in range(num_calib_grid_pts-100):
         tool_position = calib_grid_pts[calib_pt_idx,:]
         print('Calibration point: ', calib_pt_idx, '/', num_calib_grid_pts)
         #使用eye to hand 需要增加其内容属性

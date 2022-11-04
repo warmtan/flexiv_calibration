@@ -12,6 +12,7 @@ def touch_tester(args):
     config = ConfigLoader.load(args.config_file)
     print(f'Touch tester in {config["calibration_type"]} mode as indicated on configuration file.')
     robot = FlexivRobot("192.168.2.100","192.168.2.109")
+    print(robot.get_tcp_pose())
 
     camera = RealsenseD415TCP(config["camera_config_file"])
     # Load camera pose (from running camera_calibrator.py), and depth scale
@@ -26,7 +27,7 @@ def touch_tester(args):
             pix_width = x
             pix_height = y
             world_position = visionutils.transform_pix_to_world_pos(depth, pix_width, pix_height, cam_pose, camera.intrinsics, cam_depth_scale)
-            print(world_position)
+            print('world_position:', world_position)
             if config["calibration_type"] == "EYE_IN_HAND":
                 tool_world_position = world_position
                 robot.move_wrt_tool(tool_world_position)

@@ -526,9 +526,9 @@ class FlexivRobot(FlexivApi):
         self.execute_primitive(command)
         time.sleep(0.1)
         state = self.get_primitive_states()
-        while len(state) != 4 or state[2][-1] != "1":
-            state = self.get_primitive_states()
-            time.sleep(0.1)
+        # while len(state) != 4 or state[2][-1] != "1":
+        #     state = self.get_primitive_states()
+        #     time.sleep(0.1)
 
     def cali_force_sensor(self, data_collection_time=0.2):
         """calibrate force sensor.
@@ -793,6 +793,7 @@ class FlexivRobot(FlexivApi):
      
     def move_wrt_tool(self, position):
         current_pose = self.get_cartesian_pose()
+        print('current_pose: ', current_pose)
         current_pose = np.array(current_pose)
         current_position = current_pose[0:3]
         orientation = current_pose[3:6]
@@ -802,7 +803,7 @@ class FlexivRobot(FlexivApi):
         T_eb = utils.V2T(current_pose)
         base_world_position = np.dot(T_eb[0:3,0:3], position[0:3,0]) + current_position
         move_pose = self.get_tcp_pose()
-        print(move_pose)
+        print('move_pose: ', move_pose)
         move_pose[0]=base_world_position[0]
         move_pose[1]=base_world_position[1]
         move_pose[2]=base_world_position[2]
@@ -813,9 +814,9 @@ class FlexivRobot(FlexivApi):
         
     def move_to_pose(self, position, orientation):
         # 旋转矩阵到四元数
-        array1=np.array([0.68659854,-0.11323812,0.68814268,0.00116366,0.00595991,0.99997848,0.00248933])
+        array1=np.array([0.68659854,-0.11323812,0.48814268,0.00116366,0.00595991,0.99997848,0.00248933])
         self.move_ptp( array1, 
-                    max_jnt_vel=[1, 1, 2, 2, 4, 4, 4],
+                    max_jnt_vel=[0.5, 0.5, 0.5, 0.5, 0.8, 0.8, 0.8],
                     max_jnt_acc=[3.60, 3.60, 4.20, 4.20, 8.40, 8.40, 8.40])
         #Block until robot reaches desired pose
         current_pose = self.get_cartesian_pose()
