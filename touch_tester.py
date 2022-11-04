@@ -26,6 +26,7 @@ def touch_tester(args):
             pix_width = x
             pix_height = y
             world_position = visionutils.transform_pix_to_world_pos(depth, pix_width, pix_height, cam_pose, camera.intrinsics, cam_depth_scale)
+            print(world_position)
             if config["calibration_type"] == "EYE_IN_HAND":
                 tool_world_position = world_position
                 robot.move_wrt_tool(tool_world_position)
@@ -45,6 +46,7 @@ def touch_tester(args):
                 # robot.move_to_pose(base_world_position[0:3], current_orientation)
 
             else: # "EYE_TO_HAND"
+                print(robot.get_tcp_pose())
                 current_pose = robot.get_tcp_pose() #得到了笛卡尔坐标系
                 current_pose = np.array(current_pose)
                 current_orientation = current_pose[3:6]

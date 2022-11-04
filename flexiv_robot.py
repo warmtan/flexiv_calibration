@@ -783,16 +783,15 @@ class FlexivRobot(FlexivApi):
         """
         plt.ioff()
         plt.show()
-        
+
+    #四元数转欧拉角
     def get_cartesian_pose(self):
         A_pose = self.get_tcp_pose()
         B_position = A_pose[0:3]
         C_orientation = A_pose[3:7]
         MyEuler = R.from_quat(C_orientation).as_euler('xyz')
-        # MyEuler.reverse()
-        # B_position.extend(MyEuler)
-        A_pose[3:6] = B_position
-        return A_pose
+        B_position[3:6] = MyEuler     
+        return B_position
      
     def move_wrt_tool(self, position):
         current_pose = self.get_cartesian_pose()
@@ -807,9 +806,14 @@ class FlexivRobot(FlexivApi):
         self.move_to_pose(base_world_position[0:3], orientation)
         
     def move_to_pose(self, position, orientation):
-        array1=np.array([0.68659854,-0.11323812,0.28,0.00116366,0.00595991,0.99997848,0.00248933])
+        # 旋转矩阵到四元数
+        F1 = R.from_matrix(orientation)
+        F2 = F1.as_quat()
+        array1 = np.array()
+        array1[0,3] = position
+        array1[3,7] = F2
         self.move_ptp( array1, 
-                    max_jnt_vel=[6, 6, 7, 7, 14, 14, 14],
+                    max_jnt_vel=[1, 1, 2, 2, 4, 4, 4],
                     max_jnt_acc=[3.60, 3.60, 4.20, 4.20, 8.40, 8.40, 8.40])
         #Block until robot reaches desired pose
         current_pose = self.get_cartesian_pose()

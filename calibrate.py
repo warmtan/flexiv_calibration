@@ -70,10 +70,10 @@ def calibrate(config):
     robot=FlexivRobot("192.168.2.100","192.168.2.109")
     # Slow down robot to SAFE values
     #go home
-    array1=np.array([0.68659854,-0.11323812,0.28814268,0.00116366,0.00595991,0.99997848,0.00248933])
+    array2=np.array([0.68659854,-0.11323812,0.68814268,0.00116366,0.00595991,0.99997848,0.00248933])
     # array1=np.array([0.68659854,-0.11323812,0.5,0.00116366,0.00595991,0.99997848,0.00248933])
-    robot.move_ptp(array1, 
-                    max_jnt_vel=[6, 6, 7, 7, 14, 14, 14],
+    robot.move_ptp(array2, 
+                    max_jnt_vel=[1, 1, 2, 2, 4, 4, 4],
                     max_jnt_acc=[3.60, 3.60, 4.20, 4.20, 8.40, 8.40, 8.40])
 
     # Connect to the camera
@@ -101,6 +101,7 @@ def calibrate(config):
                     # Get current robot pose
                     # current_pose = robot.get_cartesian_pose() #这里使用了robot！！！！！！！！！！！！
                     current_pose = robot.get_cartesian_pose()
+                    current_pose = current_pose[0:-1]
                     if config.calibration_type == "EYE_IN_HAND":
                         rot_vec = np.array(current_pose)
                         rot_vec.shape = (1,6)
