@@ -526,9 +526,9 @@ class FlexivRobot(FlexivApi):
         self.execute_primitive(command)
         time.sleep(0.1)
         state = self.get_primitive_states()
-        # while len(state) != 4 or state[2][-1] != "1":
-        #     state = self.get_primitive_states()
-        #     time.sleep(0.1)
+        while len(state) != 4 or state[2][-1] != "1":
+            state = self.get_primitive_states()
+            time.sleep(0.1)
 
     def cali_force_sensor(self, data_collection_time=0.2):
         """calibrate force sensor.
@@ -787,11 +787,9 @@ class FlexivRobot(FlexivApi):
     #四元数转欧拉角
     def get_cartesian_pose(self):
         A_pose = self.get_tcp_pose()
-        B_position = A_pose[0:3]
-        C_orientation = A_pose[3:7]
-        MyEuler = R.from_quat(C_orientation).as_euler('xyz')
-        B_position[3:6] = MyEuler     
-        return B_position
+        B_pose = R.from_quat(A_pose[3:7]).as_euler('xyz', degrees=True) 
+        C_pose = [A_pose[0] , A_pose[1] , A_pose[2] , B_pose[0] , B_pose[1] , B_pose[2]]
+        return  C_pose
      
     def move_wrt_tool(self, position):
         current_pose = self.get_cartesian_pose()
@@ -803,15 +801,19 @@ class FlexivRobot(FlexivApi):
         current_pose.shape = (1,6)
         T_eb = utils.V2T(current_pose)
         base_world_position = np.dot(T_eb[0:3,0:3], position[0:3,0]) + current_position
-        self.move_to_pose(base_world_position[0:3], orientation)
+        move_pose = self.get_tcp_pose()
+        print(move_pose)
+        move_pose[0]=base_world_position[0]
+        move_pose[1]=base_world_position[1]
+        move_pose[2]=base_world_position[2]
+        print(move_pose)
+        self.move_ptp(move_pose,
+                    max_jnt_vel=[6, 6, 7, 7, 14, 14, 14],
+                    max_jnt_acc=[3.60, 3.60, 4.20, 4.20, 8.40, 8.40, 8.40])
         
     def move_to_pose(self, position, orientation):
         # 旋转矩阵到四元数
-        F1 = R.from_matrix(orientation)
-        F2 = F1.as_quat()
-        array1 = np.array()
-        array1[0,3] = position
-        array1[3,7] = F2
+        array1=np.array([0.68659854,-0.11323812,0.68814268,0.00116366,0.00595991,0.99997848,0.00248933])
         self.move_ptp( array1, 
                     max_jnt_vel=[1, 1, 2, 2, 4, 4, 4],
                     max_jnt_acc=[3.60, 3.60, 4.20, 4.20, 8.40, 8.40, 8.40])

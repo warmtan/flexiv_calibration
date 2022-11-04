@@ -46,8 +46,8 @@ def touch_tester(args):
                 # robot.move_to_pose(base_world_position[0:3], current_orientation)
 
             else: # "EYE_TO_HAND"
-                print(robot.get_tcp_pose())
-                current_pose = robot.get_tcp_pose() #得到了笛卡尔坐标系
+                print(robot.get_cartesian_pose())
+                current_pose = robot.get_cartesian_pose() #得到了笛卡尔坐标系
                 current_pose = np.array(current_pose)
                 current_orientation = current_pose[3:6]
                 base_world_position = world_position
