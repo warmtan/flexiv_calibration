@@ -4,6 +4,7 @@ Author: Chongzhao Mao
 """
 
 import sys
+from scipy.spatial.transform import Rotation as R
 from time import sleep
 
 sys.path.insert(0, ".")
@@ -25,6 +26,9 @@ def main():
     client.move_ptp(array1, 
                     max_jnt_vel=[6, 6, 7, 7, 14, 14, 14],
                     max_jnt_acc=[3.60, 3.60, 4.20, 4.20, 8.40, 8.40, 8.40])
+    print(array1[3:7])
+    B_pose = R.from_quat(array1[3:7]).as_euler('xyz', degrees=True) 
+    print("B_pose:",B_pose)
     # 关节控制
     # array1=np.array([-4.65114973e-03,-7.00091183e-01,4.26836050e-04,1.57289064e+00,6.37172209e-03,6.86869800e-01,3.61075555e-03])
     # client.move_online(array1)

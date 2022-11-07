@@ -290,11 +290,15 @@ class FlexivApi:
 
     def get_primitive_states(self):
         """get current primitive states.
+        #获取基元状态：获取当前基元状态。
+        返回：
+            基元状态字符串，包括“终止”、“时间段”、“到达目标”等
 
         Returns:
             string of primitive states, including 'terminated', 'timePeriod', 'reachedTarget' and so on
 
         Raises:
+            当状态为none时出错
             RuntimeError: error occurred when mode is None.
         """
         return self.robot.getPrimitiveStates()

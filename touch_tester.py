@@ -12,7 +12,7 @@ def touch_tester(args):
     config = ConfigLoader.load(args.config_file)
     print(f'Touch tester in {config["calibration_type"]} mode as indicated on configuration file.')
     robot = FlexivRobot("192.168.2.100","192.168.2.109")
-    print(robot.get_tcp_pose())
+    print("robot.get_tcp_pose()",robot.get_tcp_pose())
 
     camera = RealsenseD415TCP(config["camera_config_file"])
     # Load camera pose (from running camera_calibrator.py), and depth scale
@@ -25,7 +25,9 @@ def touch_tester(args):
             nonlocal click_point_pix, camera, robot, depth, color, cam_pose, cam_depth_scale
             click_point_pix = (x, y)
             pix_width = x
+            print("pix_height = x:",x)
             pix_height = y
+            print("pix_height = y:",y)
             world_position = visionutils.transform_pix_to_world_pos(depth, pix_width, pix_height, cam_pose, camera.intrinsics, cam_depth_scale)
             print('world_position:', world_position)
             if config["calibration_type"] == "EYE_IN_HAND":
@@ -69,10 +71,10 @@ def touch_tester(args):
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-    # Parse arguments
+    # Parse arguments 解析参数
     parser = argparse.ArgumentParser(description='Calibrate a camera with respect to a robot, and save the transformation matrix.')
 
-    # Setup options
+    # Setup options 设置选项
     parser.add_argument('--config_file', dest='config_file', action='store', default='./configurations/touch_tester_config.json', help='Configuration file for the calibration.')
     args = parser.parse_args()
     touch_tester(args)

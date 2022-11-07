@@ -84,20 +84,25 @@ def calibrate(config):
     camera = RealsenseD415TCP(config.camera_config_file)
     # Move robot to each calibration point in workspace
     print('Collecting data...')
-    for calib_pt_idx in range(num_calib_grid_pts-100):
+    for calib_pt_idx in range(num_calib_grid_pts):
         tool_position = calib_grid_pts[calib_pt_idx,:]
         print('Calibration point: ', calib_pt_idx, '/', num_calib_grid_pts)
         #使用eye to hand 需要增加其内容属性
         robot.move_to_pose(tool_position, config.tool_orientation)  #得到笛卡尔坐标系
-        time.sleep(1)
+        time.sleep(2)
         # Wait for a coherent pair of frames: depth and color
         camera_color_img, camera_depth_img = camera.get_state()
         if not (camera_depth_img is None and camera_color_img is None):
             checkerboard_pix = visionutils.find_checkerboard(camera_color_img, config.checkerboard_size)
             if checkerboard_pix is not None:
                 checkerboard_z = camera_depth_img[checkerboard_pix[1]][checkerboard_pix[0]]
+                print("checkerboard_z",checkerboard_z)
                 checkerboard_x = np.multiply(checkerboard_pix[0]-camera.intrinsics[0][2], checkerboard_z/camera.intrinsics[0][0])
+                print("checkerboard_x",checkerboard_x)
                 checkerboard_y = np.multiply(checkerboard_pix[1]-camera.intrinsics[1][2], checkerboard_z/camera.intrinsics[1][1])
+                print("checkerboard_y",checkerboard_y)
+                print('Observed points: ', [checkerboard_x,checkerboard_y,checkerboard_z])
+                
                 if checkerboard_z != 0:
                     observed_pts.append([checkerboard_x, checkerboard_y, checkerboard_z])
                     observed_pix.append(checkerboard_pix)

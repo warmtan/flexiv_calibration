@@ -20,17 +20,24 @@ def find_checkerboard(color_img, checkerboard_size):
 
 def get_3d_from_2d_point(point_wh, depth, camera_intrinsics, depth_scale=1.00):
     width = point_wh[0]
+    print("width",width)
     height = point_wh[1]
+    print("height",height)
     z3d = depth[height][width] * depth_scale
+    print("z3d",z3d)
     x3d = np.multiply(width - camera_intrinsics[0][2], z3d / camera_intrinsics[0][0])
     y3d = np.multiply(height - camera_intrinsics[1][2], z3d / camera_intrinsics[1][1])
     return np.array([[x3d, y3d, z3d]])
 
 def transform_pix_to_world_pos(depth, pix_w, pix_h, world_transform, cam_intrinsics, depth_scale):
     camera_3d_point = get_3d_from_2d_point((pix_w, pix_h), depth, cam_intrinsics, depth_scale)
+    print("camera_3d_point:",camera_3d_point)
     z_3d = camera_3d_point[0,2]
     if z_3d > 0.0:
         camera_3d_point.shape = (3,1)
+        print("world_transform:",world_transform)
+        print("world_transform[0:3,0:3]",world_transform[0:3,0:3])
+        print("world_transform[0:3,3:]",world_transform[0:3,3:])
         world_position = np.dot(world_transform[0:3,0:3], camera_3d_point) + world_transform[0:3,3:]
         return world_position.flatten()
     else:
