@@ -8,7 +8,7 @@ m_gripper = dh_modbus_gripper.dh_modbus_gripper()
 #m_gripper = dh_socket_gripper.dh_socket_gripper()
 
 def modbus_gripper() :
-    port='com7'
+    port='/dev/ttyUSB0'
     baudrate=115200
     initstate = 0
     g_state = 0

@@ -815,7 +815,9 @@ class FlexivRobot(FlexivApi):
         print('current_pose: ', current_pose)
         current_pose = np.array(current_pose)
         current_position = current_pose[0:3]
-        orientation = current_pose[3:6]
+        # orientation = current_pose[3:6] #[0.0119,0.0029,3.1366],
+        orientation = [0.0119,0.0029,3.1366]
+        
         # Transform from position to base_world_position
         position.shape = (3,1)
         print("position.shape",position.shape)
@@ -829,8 +831,8 @@ class FlexivRobot(FlexivApi):
         print("current_position",current_position)
         base_world_position = np.dot(T_eb[0:3,0:3], position[0:3,0]) + current_position
         print("base_world_position",base_world_position)
-        base_world_position[2] = base_world_position[2] + 0.10
-        # self.move_to_pose(base_world_position[0:3], orientation)
+        base_world_position[2] = base_world_position[2] + 0.18
+        self.move_to_pose(base_world_position[0:3], orientation)
         
     def move_to_pose(self, position, orientation):
         # 旋转矩阵到四元数

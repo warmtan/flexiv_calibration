@@ -33,8 +33,10 @@ def transform_pix_to_world_pos(depth, pix_w, pix_h, world_transform, cam_intrins
     camera_3d_point = get_3d_from_2d_point((pix_w, pix_h), depth, cam_intrinsics, depth_scale)
     print("camera_3d_point:",camera_3d_point)
     z_3d = camera_3d_point[0,2]
+    print(z_3d)
     if z_3d > 0.0:
         camera_3d_point.shape = (3,1)
+        print(camera_3d_point)
         print("world_transform:",world_transform)
         print("world_transform[0:3,0:3]",world_transform[0:3,0:3])
         print("world_transform[0:3,3:]",world_transform[0:3,3:])

@@ -1,6 +1,6 @@
 {
     "calibration_type": "EYE_IN_HAND",
     "camera_config_file":"./configurations/camera_config.json",
-    "calibration_depth_scale":"./calibrations/2022-11-07_14:42:13_EYE_IN_HAND_camera_depth_scale.txt",
-    "calibration_camera_pose":"./calibrations/2022-11-07_14:42:13_EYE_IN_HAND_camera_pose.txt"
+    "calibration_depth_scale":"./calibrations/2022-11-07_15:01:08_EYE_IN_HAND_camera_depth_scale.txt",
+    "calibration_camera_pose":"./calibrations/2022-11-07_15:01:08_EYE_IN_HAND_camera_pose.txt"
 }
