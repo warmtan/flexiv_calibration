@@ -832,7 +832,7 @@ class FlexivRobot(FlexivApi):
         base_world_position = np.dot(T_eb[0:3,0:3], position[0:3,0]) + current_position
         print("base_world_position",base_world_position)
         base_world_position[2] = base_world_position[2] + 0.18
-        self.move_to_pose(base_world_position[0:3], orientation)
+        # self.move_to_pose(base_world_position[0:3], orientation)
         
     def move_to_pose(self, position, orientation):
         # 旋转矩阵到四元数
